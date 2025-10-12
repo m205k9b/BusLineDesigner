@@ -263,7 +263,18 @@ bld.component('tab-station', {
                     <div class="card-header" @click="loadMapLine(true, true);">
                         <span>线路走向</span>
                     </div>
-                    <div class="card-body" id="amap"></div>
+                    <div class="card-body" id="amap">
+                        <div class="text-center p-4">
+                            <div class="text-muted mb-2">未设置 Key，无法使用地图功能</div>
+                            <div class="mb-2">
+                                <a href="#" @click.prevent="showKeySetupModal" class="text-primary" style="text-decoration: none;">如何设置 Key?</a>
+                            </div>
+                            <div class="text-muted">
+                                如已设置，请
+                                <a href="#" @click.prevent="refreshPage" class="text-primary" style="text-decoration: none;">刷新</a>
+                            </div>
+                        </div>
+                    </div>
                     <div class="card-footer">
                         <div class="btn-group btn-group-sm pull-right" role="group" style="float: left">
                             <button type="button" class="btn btn-outline-primary" :class="{ active: satelliteEnabled }" @click="setSatelliteLayer()" title="卫星图层">
@@ -374,6 +385,11 @@ bld.component('tab-station', {
         // mapInit()
         // 初始化地图div
         mapInit() {
+            if(!window.AMapKey){
+                return;
+            }
+            document.getElementById('amap').innerHTML = '';
+
             AMapLoader.load({
                 "key": window.AMapKey,
                 "version": "2.0",
@@ -1494,7 +1510,19 @@ bld.component('tab-station', {
             if(operated){
                 e.preventDefault();
             }
-        }
+        },
+
+        // showKeySetupModal
+        // 显示Key设置说明弹窗
+        showKeySetupModal() {
+            new bootstrap.Modal(document.getElementById("modalImportantNotice")).show();
+        },
+
+        // refreshPage
+        // 刷新页面
+        refreshPage() {
+            location.reload();
+        },
     },
     computed: {
         title() {

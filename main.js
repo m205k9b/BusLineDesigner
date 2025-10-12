@@ -371,7 +371,7 @@ const bld = Vue.createApp({
 
             this.showMessage(["地图加载", "", "如果加载地图出现问题，请检查设置中的 API Key 选项", false]);
         } else {
-            this.showMessage(["未设置 API Key", "", "地图登大部分功能将不可用。", false]);
+            this.showMessage(["未设置 API Key", "", "地图等大部分功能将不可用。", false]);
         }
 
         this.$refs.tabStation.mapInit();
