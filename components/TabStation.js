@@ -275,7 +275,7 @@ bld.component('tab-station', {
                             </div>
                         </div>
                     </div>
-                    <div class="card-footer">
+                    <div class="card-footer" id="mapPanelFooter">
                         <div class="btn-group btn-group-sm pull-right" role="group" style="float: left">
                             <button type="button" class="btn btn-outline-primary" :class="{ active: satelliteEnabled }" @click="setSatelliteLayer()" title="卫星图层">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 1024 1024" fill="currentColor">
@@ -386,6 +386,7 @@ bld.component('tab-station', {
         // 初始化地图div
         mapInit() {
             if(!window.AMapKey){
+                document.getElementById('mapPanelFooter').querySelectorAll('button').forEach(button => button.disabled = true);
                 return;
             }
             document.getElementById('amap').innerHTML = '';
@@ -802,6 +803,9 @@ bld.component('tab-station', {
         // setMapTool
         // 切换地图工具（查看/智能设站/新站点/新节点）
         setMapTool(tool){
+            if(!this.map){
+                return;
+            }
             try{
                 this.mapItems.infowindow.close();
             }catch(e){};
