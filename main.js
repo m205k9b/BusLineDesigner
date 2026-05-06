@@ -352,6 +352,13 @@ const bld = Vue.createApp({
         const params = new URLSearchParams(window.location.search);
         if(savedSettings = params.get('settings')){
             savedSettings = JSON.parse(new TextDecoder().decode(pako.inflate(Uint8Array.from(atob(savedSettings.replaceAll(' ', '+')), c => c.charCodeAt(0)))));
+            // 迁移旧版 settings：将 customizeKey（Key+安全密钥空格分隔）拆分为 apiKey 和 securityKey
+            if(savedSettings.general && savedSettings.general.customizeKey){
+                const parts = savedSettings.general.customizeKey.current.split(' ');
+                savedSettings.general.apiKey = {current: parts[0] || ''};
+                savedSettings.general.securityKey = {current: parts[1] || ''};
+                delete savedSettings.general.customizeKey;
+            }
             for(const type in savedSettings){
                 for(const item in savedSettings[type]){
                     this.settings[type][item].current = savedSettings[type][item].current;
@@ -363,6 +370,13 @@ const bld = Vue.createApp({
             }catch(e){}
         }else if(savedSettings = localStorage.getItem('settings')){
             savedSettings = JSON.parse(savedSettings);
+            // 迁移旧版 settings：将 customizeKey（Key+安全密钥空格分隔）拆分为 apiKey 和 securityKey
+            if(savedSettings.general && savedSettings.general.customizeKey){
+                const parts = savedSettings.general.customizeKey.current.split(' ');
+                savedSettings.general.apiKey = {current: parts[0] || ''};
+                savedSettings.general.securityKey = {current: parts[1] || ''};
+                delete savedSettings.general.customizeKey;
+            }
             for(const type in savedSettings){
                 for(const item in savedSettings[type]){
                     this.settings[type][item].current = savedSettings[type][item].current;
